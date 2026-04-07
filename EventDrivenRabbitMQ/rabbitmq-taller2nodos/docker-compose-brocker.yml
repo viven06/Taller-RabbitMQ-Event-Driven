@@ -1,0 +1,24 @@
+services:
+
+  rabbitmq:
+    build:
+        context: ./broker
+    container_name: rabbitmq
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672" # AMQP — debe ser accesible desde la otra máquina
+      - "15672:15672" # Management UI
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - rabbitmq-net
+
+networks:
+  rabbitmq-net:
+    driver: bridge
