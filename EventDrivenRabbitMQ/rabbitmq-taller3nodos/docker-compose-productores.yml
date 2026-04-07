@@ -1,0 +1,47 @@
+services:
+
+  # ─────────────────────────────────────────
+  # PRODUCTORES
+  # ─────────────────────────────────────────
+  producer-python:
+    build:
+      context: ./producer-python
+    container_name: producer-python
+    environment:
+      RABBITMQ_HOST: 10.6.101.167   # <-- IP de la máquina del compañero (broker)
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - app-net
+    restart: on-failure
+
+  producer-nodejs:
+    build:
+      context: ./producer-nodejs
+    container_name: producer-nodejs
+    environment:
+      RABBITMQ_HOST: 10.6.101.167  # <-- IP de la máquina del compañero (broker)
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - app-net
+    restart: on-failure
+
+  producer-go:
+    build:
+      context: ./producer-go
+    container_name: producer-go
+    environment:
+      RABBITMQ_HOST: 10.6.101.167  # <-- IP de la máquina del compañero (broker)
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - app-net
+    restart: on-failure
+
+networks:
+  app-net:
+    driver: bridge

@@ -1,0 +1,132 @@
+services:
+
+  # ─────────────────────────────────────────
+  # BROKER
+  # ─────────────────────────────────────────
+  rabbitmq:
+    build:
+      context: ./broker
+    container_name: rabbitmq
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"      # AMQP
+      - "15672:15672"    # Management UI → http://localhost:15672
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - rabbitmq-net
+
+  # ─────────────────────────────────────────
+  # PRODUCTORES
+  # ─────────────────────────────────────────
+  producer-python:
+    build:
+      context: ./producer-python
+    container_name: producer-python
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  producer-nodejs:
+    build:
+      context: ./producer-nodejs
+    container_name: producer-nodejs
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  producer-go:
+    build:
+      context: ./producer-go
+    container_name: producer-go
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  # ─────────────────────────────────────────
+  # CONSUMIDORES
+  # ─────────────────────────────────────────
+  consumer-python:
+    build:
+      context: ./consumer-python
+    container_name: consumer-python
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  consumer-nodejs:
+    build:
+      context: ./consumer-nodejs
+    container_name: consumer-nodejs
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  consumer-java:
+    build:
+      context: ./consumer-java
+    container_name: consumer-java
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+# ─────────────────────────────────────────
+# RED
+# ─────────────────────────────────────────
+networks:
+  rabbitmq-net:
+    driver: bridge

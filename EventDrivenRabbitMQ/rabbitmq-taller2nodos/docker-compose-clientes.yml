@@ -1,0 +1,92 @@
+services:
+
+  # ─────────────────────────────────────────
+  # PRODUCTORES
+  # ─────────────────────────────────────────
+  producer-python:
+    build:
+      context: ./producer-python
+    container_name: producer-python
+    environment:
+      RABBITMQ_HOST: 10.6.101.167
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  producer-nodejs:
+    build:
+      context: ./producer-nodejs
+    container_name: producer-nodejs
+    environment:
+      RABBITMQ_HOST: 10.6.101.167
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  producer-go:
+    build:
+      context: ./producer-go
+    container_name: producer-go
+    environment:
+      RABBITMQ_HOST: 10.6.101.167
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  # ─────────────────────────────────────────
+  # CONSUMIDORES
+  # ─────────────────────────────────────────
+  consumer-python:
+    build:
+      context: ./consumer-python
+    container_name: consumer-python
+    environment:
+      RABBITMQ_HOST: 10.6.101.167
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  consumer-nodejs:
+    build:
+      context: ./consumer-nodejs
+    container_name: consumer-nodejs
+    environment:
+      RABBITMQ_HOST: 10.6.101.167
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+  consumer-java:
+    build:
+      context: ./consumer-java
+    container_name: consumer-java
+    environment:
+      RABBITMQ_HOST: 10.6.101.167
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - rabbitmq-net
+    restart: on-failure
+
+# ─────────────────────────────────────────
+# RED
+# ─────────────────────────────────────────
+networks:
+  rabbitmq-net:
+    driver: bridge

@@ -1,0 +1,12 @@
+{
+  "name": "producer-nodejs",
+  "version": "1.0.0",
+  "description": "RabbitMQ Node.js Producer",
+  "main": "producer.js",
+  "scripts": {
+    "start": "node producer.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.4"
+  }
+}
