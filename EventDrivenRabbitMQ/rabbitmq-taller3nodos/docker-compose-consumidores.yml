@@ -1,0 +1,47 @@
+services:
+
+  # ─────────────────────────────────────────
+  # CONSUMIDORES
+  # ─────────────────────────────────────────
+  consumer-python:
+    build:
+      context: ./consumer-python
+    container_name: consumer-python
+    environment:
+      RABBITMQ_HOST: 10.6.101.167   # <-- IP de la máquina del compañero (broker)
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - app-net
+    restart: on-failure
+
+  consumer-nodejs:
+    build:
+      context: ./consumer-nodejs
+    container_name: consumer-nodejs
+    environment:
+      RABBITMQ_HOST: 10.6.101.167   # <-- IP de la máquina del compañero (broker)
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - app-net
+    restart: on-failure
+
+  consumer-java:
+    build:
+      context: ./consumer-java
+    container_name: consumer-java
+    environment:
+      RABBITMQ_HOST: 10.6.101.167  # <-- IP de la máquina del compañero (broker)
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - app-net
+    restart: on-failure
+
+networks:
+  app-net:
+    driver: bridge
